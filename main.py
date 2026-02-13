@@ -73,7 +73,26 @@ def go(config: DictConfig):
             ##################
             # Implement here #
             ##################
-            pass
+        
+            mlflow_run_path = os.path.join(
+                hydra.utils.get_original_cwd(),
+                "src",
+                "data_check",
+            )
+
+            _ = mlflow.run(
+                mlflow_run_path,
+                "main",
+                env_manager="conda",
+                parameters={
+                    "csv": "clean_sample.csv:latest",
+                    "ref": "clean_sample.csv:reference",
+                    "kl_threshold": config["data_check"]["kl_threshold"],
+                    "min_price": config["etl"]["min_price"],
+                    "max_price": config["etl"]["max_price"],
+                },
+            )
+
 
         if "data_split" in active_steps:
             ##################
