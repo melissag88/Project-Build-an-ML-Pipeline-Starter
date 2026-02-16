@@ -158,7 +158,22 @@ def go(config: DictConfig):
             # Implement here #
             ##################
 
-            pass
+            mlflow_run_path = os.path.join(
+                hydra.utils.get_original_cwd(),
+                "components",
+                "test_regression_model",
+            )
+            
+            _ = mlflow.run(
+                mlflow_run_path,
+                "main",
+                env_manager="conda",
+                parameters={
+                    "mlflow_model": "model_export:prod",
+                    "test_dataset": "test_data.csv:latest",
+                },
+            )
+
 
 
 if __name__ == "__main__":
